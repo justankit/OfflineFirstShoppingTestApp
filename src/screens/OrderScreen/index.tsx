@@ -6,6 +6,7 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
 import LoadingOverlay from '../../components/common/LoadingOverlay';
+import SyncStatusIndicator from '../../components/common/SyncStatusIndicator';
 import { useOrderManagement } from '../../hooks';
 import OrderHeader from './components/OrderHeader';
 import OrderItem from './components/OrderItem';
@@ -21,6 +22,9 @@ const OrderScreen: React.FC<Props> = () => {
   const { loading } = useSelector((state: RootState) => state.order);
   const { currentOrder, removeItem, updateItemQuantity, clearOrder } =
     useOrderManagement();
+
+  // Get sync status from the current order
+  const syncStatus = currentOrder?.syncStatus || 'pending';
 
   const incrementQuantity = (itemId: string) => {
     const item = currentOrder?.lineItems.find(
@@ -73,6 +77,9 @@ const OrderScreen: React.FC<Props> = () => {
     return <EmptyState />;
   }
 
+  // If order is pending deletion, show it with a visual indicator
+  const isPendingDeletion = currentOrder.syncStatus === 'pending_deletion';
+
   const totalPrice = currentOrder.lineItems.reduce(
     (sum: number, item: OrderLineItem) => sum + item.totalPrice,
     0,
@@ -85,8 +92,13 @@ const OrderScreen: React.FC<Props> = () => {
 
   return (
     <View
-      style={[styles.container, { backgroundColor: theme.colors.background }]}
+      style={[
+        styles.container,
+        { backgroundColor: theme.colors.background },
+        isPendingDeletion && { opacity: 0.7 }, // Dim the order if pending deletion
+      ]}
     >
+      <SyncStatusIndicator syncStatus={syncStatus} />
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <OrderHeader
           orderId={currentOrder.id}
@@ -99,9 +111,9 @@ const OrderScreen: React.FC<Props> = () => {
             <OrderItem
               key={item.id}
               item={item}
-              onIncrement={incrementQuantity}
-              onDecrement={decrementQuantity}
-              onRemove={removeItem}
+              onIncrement={isPendingDeletion ? () => {} : incrementQuantity} // Disable editing if pending deletion
+              onDecrement={isPendingDeletion ? () => {} : decrementQuantity}
+              onRemove={isPendingDeletion ? () => {} : removeItem}
             />
           ))}
         </View>
@@ -109,7 +121,10 @@ const OrderScreen: React.FC<Props> = () => {
         <OrderSummary totalPrice={totalPrice} />
       </ScrollView>
 
-      <OrderActions onPlaceOrder={placeOrder} onClearOrder={clearOrder} />
+      <OrderActions
+        onPlaceOrder={isPendingDeletion ? () => {} : placeOrder} // Disable actions if pending deletion
+        onClearOrder={isPendingDeletion ? () => {} : clearOrder}
+      />
 
       {loading && currentOrder && (
         <LoadingOverlay message="Updating order..." />

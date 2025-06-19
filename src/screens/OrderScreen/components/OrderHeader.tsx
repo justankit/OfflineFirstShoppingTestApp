@@ -1,23 +1,28 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useTheme } from '@/contexts/ThemeContext';
-import PendingIcon from '@/components/common/icons/PendingIcon';
-import SyncedIcon from '@/components/common/icons/SyncedIcon';
+import { useAppSelector } from '@/store/hooks';
 
 interface OrderHeaderProps {
   orderId: string;
   timestamp: number;
   totalItems: number;
-  syncStatus?: 'pending' | 'synced';
 }
 
 const OrderHeader: React.FC<OrderHeaderProps> = ({
   orderId,
   timestamp,
   totalItems,
-  syncStatus = 'synced',
 }) => {
   const { theme } = useTheme();
+
+  // Debug logging
+
+  // Get the order from Redux to access apiId
+  const { currentOrder } = useAppSelector((state: any) => state.order);
+
+  // Display API ID if available, otherwise use local ID
+  const displayOrderId = currentOrder?.apiId || orderId;
 
   const formatDate = (timestamp: number) => {
     return new Date(timestamp * 1000).toLocaleDateString('en-US', {
@@ -29,34 +34,12 @@ const OrderHeader: React.FC<OrderHeaderProps> = ({
     });
   };
 
-  const renderSyncIcon = () => {
-    if (syncStatus === 'pending') {
-      return (
-        <View style={styles.syncStatus}>
-          <PendingIcon size={18} color={theme.colors.warning} />
-          <Text style={[styles.syncText, { color: theme.colors.warning }]}>
-            Pending
-          </Text>
-        </View>
-      );
-    }
-    return (
-      <View style={styles.syncStatus}>
-        <SyncedIcon size={18} color={theme.colors.success} />
-        <Text style={[styles.syncText, { color: theme.colors.success }]}>
-          Synced
-        </Text>
-      </View>
-    );
-  };
-
   return (
     <>
       <View style={styles.header}>
         <Text style={[styles.title, { color: theme.colors.text }]}>
           Order Details
         </Text>
-        {renderSyncIcon()}
       </View>
 
       <View
@@ -72,7 +55,7 @@ const OrderHeader: React.FC<OrderHeaderProps> = ({
             Order ID:
           </Text>
           <Text style={[styles.orderInfoValue, { color: theme.colors.text }]}>
-            {orderId}
+            {displayOrderId}
           </Text>
         </View>
         <View style={styles.orderInfoRow}>
@@ -117,15 +100,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 12,
-  },
-  syncStatus: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  syncText: {
-    marginLeft: 4,
-    fontSize: 14,
-    fontWeight: '600',
   },
   orderInfo: {
     padding: 16,

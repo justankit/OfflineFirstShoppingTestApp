@@ -5,7 +5,11 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/types/navigation';
 import Button from '@/components/common/Button';
 import LoadingOverlay from '@/components/common/LoadingOverlay';
-import { useOfflineProducts, useOrderActions } from '@/hooks';
+import {
+  useOfflineProducts,
+  useOfflineOrderActions,
+  useOrderManagement,
+} from '@/hooks';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { useAppSelector } from '@/store/hooks';
 import ProductCard from './components/ProductCard';
@@ -27,7 +31,7 @@ const ProductListScreen: React.FC<Props> = ({ navigation }) => {
     useOfflineProducts();
   const networkStatus = useNetInfo();
   const { currentOrder } = useAppSelector(state => state.order);
-  const { addToOrder, isAddingToOrder } = useOrderActions();
+  const { addToOrder, isAddingToOrder, manualSync } = useOfflineOrderActions();
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -38,6 +42,7 @@ const ProductListScreen: React.FC<Props> = ({ navigation }) => {
   const handleRetry = () => {
     refreshProducts();
     syncProducts();
+    manualSync();
   };
 
   const handleRefresh = async () => {
@@ -45,6 +50,7 @@ const ProductListScreen: React.FC<Props> = ({ navigation }) => {
     try {
       await refreshProducts();
       await syncProducts();
+      await manualSync();
     } finally {
       setRefreshing(false);
     }
@@ -52,8 +58,9 @@ const ProductListScreen: React.FC<Props> = ({ navigation }) => {
 
   const renderProduct = ({ item }: { item: Product }) => {
     const orderItem = currentOrder?.lineItems.find(
-      (orderItem: any) => orderItem.id === item.id,
+      (orderItem: any) => orderItem.productId === item.id,
     );
+
     return (
       <ProductCard
         product={item}

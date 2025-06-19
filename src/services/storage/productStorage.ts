@@ -2,6 +2,7 @@ import { database } from './database';
 
 export interface StoredProduct {
   id: string;
+  apiId: string; // Original API ID
   name: string;
   price: number;
   image: string;
@@ -20,6 +21,7 @@ class ProductStorage {
       let record: any;
       await database.write(async () => {
         record = await productsCollection.create((rec: any) => {
+          rec.apiId = product.apiId;
           rec.name = product.name;
           rec.price = product.price;
           rec.image = product.image;
@@ -30,6 +32,7 @@ class ProductStorage {
 
       return {
         id: record.id,
+        apiId: (record as any).apiId,
         name: (record as any).name,
         price: (record as any).price,
         image: (record as any).image,
@@ -50,6 +53,7 @@ class ProductStorage {
 
       return records.map((product: any) => ({
         id: product.id,
+        apiId: (product as any).apiId,
         name: (product as any).name,
         price: (product as any).price,
         image: (product as any).image,

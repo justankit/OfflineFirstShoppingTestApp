@@ -5,6 +5,7 @@ export interface OrderLineItem {
   image: string;
   quantity: number;
   totalPrice: number;
+  productId: string;
 }
 
 export interface Order {

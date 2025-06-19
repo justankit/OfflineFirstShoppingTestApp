@@ -28,6 +28,9 @@ export {
   updateOrder,
   deleteOrder,
   clearOrder,
+  loadActiveOrder,
+  syncOrders,
+  setSyncStatus,
 } from './slices/orderSlice';
 
 export { useAppDispatch, useAppSelector } from './hooks';

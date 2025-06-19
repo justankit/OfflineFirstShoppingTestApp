@@ -59,6 +59,7 @@ class SyncManager {
         StoredProduct,
         'id' | 'createdAt' | 'updatedAt'
       >[] = apiProducts.map(product => ({
+        apiId: product.id, // Store the original API ID
         name: product.name,
         price: product.price,
         image: product.image,

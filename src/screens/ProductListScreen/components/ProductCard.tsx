@@ -43,6 +43,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <Text style={[styles.productName, { color: theme.colors.text }]}>
           {product.name}
         </Text>
+        <Text style={[styles.productId, { color: theme.colors.textSecondary }]}>
+          ID: {product.id}
+        </Text>
         <Text style={[styles.price, { color: theme.colors.primary }]}>
           ₹{product.price}
         </Text>
@@ -83,6 +86,11 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 16,
     fontWeight: '600',
+    marginBottom: 2,
+  },
+  productId: {
+    fontSize: 10,
+    fontFamily: 'monospace',
     marginBottom: 4,
   },
   price: {

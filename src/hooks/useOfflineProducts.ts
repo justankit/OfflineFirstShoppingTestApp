@@ -25,7 +25,14 @@ export const useOfflineProducts = (): UseOfflineProductsReturn => {
       setError(null);
 
       const localProducts = await syncManager.loadProducts();
-      setProducts(localProducts);
+
+      const transformedProducts = localProducts.map(product => ({
+        ...product,
+        id: product.apiId,
+        dbId: product.id,
+      }));
+
+      setProducts(transformedProducts);
 
       const currentStatus = syncManager.getSyncStatus();
       setSyncStatus(currentStatus);

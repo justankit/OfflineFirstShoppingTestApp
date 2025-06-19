@@ -17,6 +17,7 @@ export default class Order extends Model {
   @field('timestamp') timestamp!: number;
   @field('operation') operation!: string;
   @field('is_deleted') isDeleted!: boolean;
+  @field('api_id') apiId?: string;
   @readonly @date('created_at') createdAt!: Date;
   @date('updated_at') updatedAt!: Date;
   @field('total_price') totalPrice!: number;

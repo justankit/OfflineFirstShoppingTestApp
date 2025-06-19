@@ -30,7 +30,7 @@ function App() {
               translucent
             />
             <RootNavigator />
-            <NetworkLoggerOverlay />
+            {/* <NetworkLoggerOverlay /> */}
           </NavigationContainer>
         </ThemeProvider>
       </SafeAreaProvider>

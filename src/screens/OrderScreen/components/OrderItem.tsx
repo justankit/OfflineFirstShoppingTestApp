@@ -50,6 +50,12 @@ const OrderItem: React.FC<OrderItemProps> = ({
         <Text style={[styles.productName, { color: theme.colors.text }]}>
           {item.name}
         </Text>
+        <Text style={[styles.itemId, { color: theme.colors.textSecondary }]}>
+          Item ID: {item.id}
+        </Text>
+        <Text style={[styles.productId, { color: theme.colors.textSecondary }]}>
+          Product ID: {item.productId}
+        </Text>
         <Text style={[styles.productPrice, { color: theme.colors.primary }]}>
           ₹{item.price.toFixed(2)}
         </Text>
@@ -115,6 +121,16 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 16,
     fontWeight: '600',
+    marginBottom: 2,
+  },
+  itemId: {
+    fontSize: 9,
+    fontFamily: 'monospace',
+    marginBottom: 1,
+  },
+  productId: {
+    fontSize: 9,
+    fontFamily: 'monospace',
     marginBottom: 4,
   },
   productPrice: {

@@ -4,6 +4,7 @@ import { field, date } from '@nozbe/watermelondb/decorators';
 export default class Product extends Model {
   static table = 'products';
 
+  @field('api_id') apiId!: string; // Store the original API ID
   @field('name') name!: string;
   @field('price') price!: number;
   @field('image') image!: string;
