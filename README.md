@@ -116,6 +116,19 @@ npm run lint    # Check code
 npm test        # Run tests
 ```
 
+## Testing Offline/Online Behavior
+
+### Simulate Network Conditions
+
+**On Simulator:**
+
+- Turn off system WiFi to go offline
+- Turn on system WiFi to go back online
+
+**On Physical Device:**
+
+- Turn on/off internet or wifi or Turn airplane mode on/off
+
 ## Troubleshooting
 
 - **Metro issues**: `npx react-native start --reset-cache`
