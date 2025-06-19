@@ -1,8 +1,3 @@
-/**
- * Product Model
- * WatermelonDB model for product data
- */
-
 import { Model } from '@nozbe/watermelondb';
 import { field, date } from '@nozbe/watermelondb/decorators';
 

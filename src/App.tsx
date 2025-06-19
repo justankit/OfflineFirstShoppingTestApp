@@ -14,6 +14,7 @@ import { Provider } from 'react-redux';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import RootNavigator from '@/navigation/RootNavigator';
 import { store } from '@/store';
+import NetworkLoggerOverlay from '@/components/common/NetworkLoggerOverlay';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -29,6 +30,7 @@ function App() {
               translucent
             />
             <RootNavigator />
+            <NetworkLoggerOverlay />
           </NavigationContainer>
         </ThemeProvider>
       </SafeAreaProvider>

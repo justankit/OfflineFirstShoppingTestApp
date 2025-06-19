@@ -11,4 +11,5 @@ export interface Order {
   id: string;
   timestamp: number;
   lineItems: OrderLineItem[];
+  syncStatus?: 'pending' | 'synced';
 }
